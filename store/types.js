@@ -3,3 +3,4 @@ export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_ERROR = 'LOGIN_ERROR';
 export const UPDATE_TOKEN = 'UPDATE_TOKEN';
 export const SET_TOKEN_INTERVAL = 'SET_TOKEN_INTERVAL';
+export const INITIALIZE = 'INITIALIZE';

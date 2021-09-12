@@ -1,4 +1,4 @@
-import { LOADING, LOGIN_ERROR, LOGIN_SUCCESS, UPDATE_TOKEN } from "../types";
+import { LOADING, INITIALIZE, LOGIN_ERROR, LOGIN_SUCCESS, UPDATE_TOKEN } from "../types";
 
 const INITIAL_STATE = {
     user: null,
@@ -16,6 +16,11 @@ function authReducer (state = INITIAL_STATE, action) {
                 ...state,
                 loading: payload
             };
+        case INITIALIZE:
+            return {
+                ...state,
+                user: payload.user
+            }
         case LOGIN_SUCCESS:
             //save refresh token
             window.localStorage.setItem('auth-token', payload.token);

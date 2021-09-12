@@ -1,15 +1,15 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import InternLayout from "../components/core/layouts/Intern";
 import {
     Box,
     Card,
-    CardContent,
+    CardContent, CircularProgress,
     Divider,
     Grid,
     ListItem,
     ListItemIcon,
     ListItemText,
-    makeStyles, TextField
+    makeStyles
 } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import FavoriteIcon from "@material-ui/icons/Favorite";
@@ -23,6 +23,10 @@ import MemoryIcon from '@material-ui/icons/Memory';
 import Rate from "../components/dashboard/Rate";
 import Oxygen from "../components/dashboard/Oxygen";
 import ReactStickyBox from 'react-sticky-box';
+import {useSelector} from "react-redux";
+import {useRouter} from "next/router";
+import { useSession } from '../components/core/index';
+import authReducer from "../store/reducers/auth";
 
 const useMetricCardStyles = makeStyles((theme) => ({
     glass: {
@@ -108,7 +112,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MainView = ({ }) => {
-    const classes = useStyles();
+    const classes = useStyles(),
+        [loading, setLoading] = useState(true),
+        token = useSession(),
+        { user } = useSelector(state => state.authReducer);
+
+    useEffect(() => {
+        if (token) setLoading(false);
+    }, [token]);
+
+    if (loading) return <Box width={'100%'} height={'100vh'} display={'flex'} alignItems={'center'} justifyContent={'center'}>
+        <CircularProgress color={'primary'} />
+    </Box>;
 
     return <InternLayout title={'Inicio'}>
         <Grid container spacing={4}>
@@ -118,7 +133,7 @@ const MainView = ({ }) => {
                         <Grid item xs={12}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
-                                    <Typography variant={'h2'} gutterBottom>Bienvenido Alejandro Gómez</Typography>
+                                    <Typography variant={'h2'} gutterBottom>Bienvenido {user?.fullName}</Typography>
                                     <Typography paragraph>Tu estado de salud es: <span className={classes.healthStatus}>bueno</span></Typography>
                                 </Grid>
                             </Grid>
