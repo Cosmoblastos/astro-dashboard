@@ -5,8 +5,8 @@ import {Provider} from "react-redux";
 import store from "../store";
 import {ApolloClient, ApolloProvider, gql, HttpLink, InMemoryCache, useLazyQuery, useQuery} from "@apollo/client";
 import {setContext} from "@apollo/client/link/context";
-import { onError } from '@apollo/client/link/error';
-import {useCallback, useEffect, useState} from "react";
+import {useEffect} from "react";
+import rootConfig from '../config/root.config.json';
 import {useRouter} from "next/router";
 import {INITIALIZE, LOGIN_ERROR, LOGIN_SUCCESS} from "../store/types";
 
@@ -16,7 +16,7 @@ import {INITIALIZE, LOGIN_ERROR, LOGIN_SUCCESS} from "../store/types";
 
 
 const httpLink = new HttpLink({
-    uri: 'http://localhost:4000',
+    uri: rootConfig.serverHost,
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -55,7 +55,6 @@ function App ({ Component, pageProps }) {
         const _token = localStorage.getItem('auth-token');
         if (!_token) return router.replace('/login');
         refetch({ token: _token })?.then(({ data }) => {
-            console.log('INITIALIZED');
             dispatch({ type: INITIALIZE, payload: data?.initialize });
         });
     }, [token, refetch]);
